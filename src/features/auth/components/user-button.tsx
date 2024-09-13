@@ -17,14 +17,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useCurrentUser } from "../hooks/use-current-user";
+import { useCurrentUser } from "../api/use-current-user";
 
 export const UserButton = () => {
     const { signOut } = useAuthActions();
     const { data, isLoading } = useCurrentUser();
 
     if (isLoading) {
-        return <Loader className="size-4 animate-spin text-muted-foreground" />
+        return <Loader className="size-4 animate-spin text-muted-foreground ml-6 mt-6" />
     }
 
     if (!data) {
@@ -38,7 +38,7 @@ export const UserButton = () => {
     return (
         <DropdownMenu modal={false}>
             <DropdownMenuTrigger className="outline-none relative">
-                <Avatar className="size-10 hover:opacity-90 transition ml-2 mt-2">
+                <Avatar className="size-12 hover:opacity-90 transition ml-2 mt-2">
                     <AvatarImage alt={name} src={image} />
                     <AvatarFallback className="bg-slate-900 text-white">
                         {avatarFallback}

@@ -84,3 +84,26 @@ body,
     --chart-5: 340 75% 55%;
   }
 }
+
+.my-sidebar-item {
+  display: flex;
+  /* Equivalent to 'flex' */
+  align-items: center;
+  /* Equivalent to 'items-center' */
+  gap: 0.375rem;
+  /* Equivalent to 'gap-1.5' (1.5 * 0.25rem) */
+  justify-content: flex-start;
+  /* Equivalent to 'justify-start' */
+  font-weight: 400;
+  /* Equivalent to 'font-normal' */
+  height: 1.75rem;
+  /* Equivalent to 'h-7' (7 * 0.25rem) */
+  padding-left: 1.125rem;
+  /* Equivalent to 'px-[18px]' */
+  padding-right: 1.125rem;
+  /* Equivalent to 'px-[18px]' */
+  font-size: 0.875rem;
+  /* Equivalent to 'text-sm' */
+  overflow: hidden;
+  /* Equivalent to 'overflow-hidden' */
+}

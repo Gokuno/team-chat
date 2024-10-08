@@ -18,10 +18,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useCurrentUser } from "../api/use-current-user";
+import { useRouter } from "next/navigation";
 
 export const UserButton = () => {
     const { signOut } = useAuthActions();
     const { data, isLoading } = useCurrentUser();
+
+    const router = useRouter();
 
     if (isLoading) {
         return <Loader className="size-4 animate-spin text-muted-foreground ml-6 mt-6" />
@@ -38,15 +41,15 @@ export const UserButton = () => {
     return (
         <DropdownMenu modal={false}>
             <DropdownMenuTrigger className="outline-none relative">
-                <Avatar className="size-12 hover:opacity-90 transition ml-2 mt-2">
-                    <AvatarImage alt={name} src={image} />
-                    <AvatarFallback className="bg-slate-900 text-white">
+                <Avatar className="rounded-md size-12 hover:opacity-90 transition ml-2 mt-2">
+                    <AvatarImage className="rounded-md" alt={name} src={image} />
+                    <AvatarFallback className="bg-slate-900 text-white rounded-md">
                         {avatarFallback}
                     </AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center" side="right" className="w-60">
-                <DropdownMenuItem onClick={() => signOut()} className="h-10">
+                <DropdownMenuItem onClick={() => signOut().then(() => { router.push("/auth") })} className="h-10">
                     <LogOut className="size-4 mr-2" />
                     Cerrar sesion
                 </DropdownMenuItem>

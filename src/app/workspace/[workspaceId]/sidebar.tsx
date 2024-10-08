@@ -13,7 +13,7 @@ export const Sidebar = () => {
         <aside className="w-[70px] h-full bg-slate-800 flex flex-col gap-y-4 items-center pt-9 pb-4">
             <WorkspaceSwitcher />
             <SidebarButton icon={Home} label="Inicio" isActive={pathname.includes("/workspace")} />
-            <SidebarButton icon={MessageSquare} label="DMs" isActive />
+            <SidebarButton icon={MessageSquare} label="MDs" isActive />
             <SidebarButton icon={Bell} label="Actividad" isActive />
             <SidebarButton icon={MoreHorizontal} label="Mas" isActive />
             <div className="flex flex-col items-center justify-center gap-y-1 mt-auto mr-2">

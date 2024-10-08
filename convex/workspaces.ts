@@ -32,8 +32,6 @@ export const create = mutation({
             joinCode,
         });
 
-        // En caso de ocupar workspaceId
-        //const workspace = await ctx.db.get(workspaceId);
         await ctx.db.insert("members", {
             userId,
             workspaceId,
@@ -123,7 +121,7 @@ export const update = mutation({
             )
             .unique();
 
-        if (!member || member.role != "admin") {
+        if (!member || member.role !== "admin") {
             throw new Error("No autorizado")
         }
 
@@ -153,7 +151,7 @@ export const remove = mutation({
             )
             .unique();
 
-        if (!member || member.role != "admin") {
+        if (!member || member.role !== "admin") {
             throw new Error("No autorizado")
         }
 

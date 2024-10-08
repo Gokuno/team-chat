@@ -2,7 +2,7 @@
 
 const WorkspaceIdPage = () => {
     return (
-        <div>
+        <div className="ml-5 mt-3">
             Id de Espacio de trabajo
         </div>
     );

@@ -14,6 +14,7 @@ import {
 
 import { PreferencesModal } from "./preferences-modal";
 import { Doc } from "../../../../convex/_generated/dataModel";
+import { InviteModal } from "./invite-modal";
 
 interface WorkspaceIdLayoutProps {
     workspace: Doc<"workspaces">
@@ -21,11 +22,18 @@ interface WorkspaceIdLayoutProps {
 }
 
 export const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceIdLayoutProps) => {
-    const [preferencesopen, setPreferencesOpen] = useState(false);
+    const [preferencesOpen, setPreferencesOpen] = useState(false);
+    const [inviteOpen, setInviteOpen] = useState(false);
 
     return (
         <>
-            <PreferencesModal open={preferencesopen} setOpen={setPreferencesOpen} initialValue={workspace.name} />
+            <InviteModal
+                open={inviteOpen}
+                setOpen={setInviteOpen}
+                name={workspace.name}
+                joinCode={workspace.joinCode}
+            />
+            <PreferencesModal open={preferencesOpen} setOpen={setPreferencesOpen} initialValue={workspace.name} />
             <div className="flex items-center justify-between px-4 h-[49px] gap-0.5">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -54,9 +62,9 @@ export const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceIdLayoutProps) 
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                     className="cursor-pointer py-2"
-                                    onClick={() => { }}
+                                    onClick={() => setInviteOpen(true)}
                                 >
-                                    Invita personas a {workspace.name}
+                                    Invitar a {workspace.name}
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem

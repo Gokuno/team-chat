@@ -11,7 +11,39 @@ const generateCode = () => {
     ).join("");
 
     return code;
-}
+};
+
+export const newJoinCode = mutation({
+    args: {
+        workspaceId: v.id("workspaces"),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx);
+
+        if (!userId) {
+            throw new Error("No autorizado");
+        }
+
+        const member = await ctx.db
+            .query("members")
+            .withIndex("by_workespace_id_user_id", (q) =>
+                q.eq("workspaceId", args.workspaceId).eq("userId", userId)
+            )
+            .unique();
+
+        if (!member || member.role !== "admin") {
+            throw new Error("No autorizado");
+        }
+
+        const joinCode = generateCode();
+
+        await ctx.db.patch(args.workspaceId, {
+            joinCode,
+        });
+
+        return args.workspaceId;
+    },
+});
 
 export const create = mutation({
     args: {

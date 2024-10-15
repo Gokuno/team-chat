@@ -13,6 +13,49 @@ const generateCode = () => {
     return code;
 };
 
+export const join = mutation({
+    args: {
+        joinCode: v.string(),
+        workspaceId: v.id("workspaces"),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx);
+
+        if (!userId) {
+            throw new Error("No autorizado");
+        }
+
+        const workspace = await ctx.db.get(args.workspaceId);
+
+        if (!workspace) {
+            throw new Error("No se encontro espacio de trabajo");
+        }
+
+        if (workspace.joinCode !== args.joinCode.toLowerCase()) {
+            throw new Error("Codigo para unirse invalido")
+        }
+
+        const exisitingMember = await ctx.db
+            .query("members")
+            .withIndex("by_workespace_id_user_id", (q) =>
+                q.eq("workspaceId", args.workspaceId).eq("userId", userId)
+            )
+            .unique();
+
+        if (exisitingMember) {
+            throw new Error("Miembro ya esta activo en este espacio de trabajo");
+        }
+
+        await ctx.db.insert("members", {
+            userId,
+            workspaceId: workspace._id,
+            role: "member",
+        });
+
+        return workspace._id;
+    },
+});
+
 export const newJoinCode = mutation({
     args: {
         workspaceId: v.id("workspaces"),

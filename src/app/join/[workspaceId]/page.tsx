@@ -2,19 +2,47 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo, useEffect } from "react";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 import VerificationInput from "react-verification-input";
 
+import { useJoin } from "@/features/workspaces/api/use-join";
 import { useGetWorkspaceInfo } from "@/features/workspaces/api/use-get-workspace-info";
 
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 
 
 const JoinPage = () => {
+    const router = useRouter();
     const workspaceId = useWorkspaceId();
 
+    const { mutate, isPending } = useJoin();
     const { data, isLoading } = useGetWorkspaceInfo({ id: workspaceId });
+
+    const isMember = useMemo(() => data?.isMember, [data?.isMember]);
+
+    useEffect(() => {
+        if (isMember) {
+            router.push(`/workspace/${workspaceId}`);
+        }
+    }, [isMember, router, workspaceId]);
+
+    const handleComplete = (value: string) => {
+        mutate({ workspaceId, joinCode: value }, {
+            onSuccess: (id) => {
+                router.replace(`/workspace/${id}`);
+                toast.success("Se unio a espacio de trabajo");
+            },
+
+            onError: () => {
+                toast.error("Union al espacio de trabajo fallida");
+            }
+        })
+    };
 
     if (isLoading) {
         return (
@@ -37,9 +65,10 @@ const JoinPage = () => {
                     </p>
                 </div>
                 <VerificationInput
+                    onComplete={handleComplete}
                     length={6}
                     classNames={{
-                        container: "flex gap-x-2",
+                        container: cn("flex gap-x-2", isPending && "opacity-60 cursor-not-allowed"),
                         character: "uppercase h-auto rounded-md border border-gray-300 flex items-center justify-center text-lg font-medium text-gray-500",
                         characterInactive: "bg-gray-100",
                         characterSelected: "bg-white text-black",

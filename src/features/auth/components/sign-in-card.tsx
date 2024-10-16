@@ -53,7 +53,7 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
         <Card className="w-full h-full p-8">
             <CardHeader className="px-0 pt-0" >
                 <CardTitle>
-                    Inciar sesion para continuar
+                    Iniciar sesion para continuar
                 </CardTitle>
                 <CardDescription>
                     Use su correo electronico u otro servicio para continuar

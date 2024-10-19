@@ -119,7 +119,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
                         className="w-full relative"
                     >
                         <FcGoogle className="size-5 absolute top-3 left-2.5" />
-                        Incia con Google
+                        Inicia con Google
                     </Button>
                 </div>
                 <div className="text-xs text-muted-foreground">

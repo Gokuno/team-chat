@@ -3,6 +3,79 @@ import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { mutation, query } from "./_generated/server";
 
+export const remove = mutation({
+    args: {
+        id: v.id("channels"),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx);
+
+        if (!userId) {
+            throw new Error("No autorizado");
+        }
+
+        const channel = await ctx.db.get(args.id);
+
+        if (!channel) {
+            throw new Error('No se encontro canal');
+        }
+
+        const member = await ctx.db
+            .query("members")
+            .withIndex("by_workespace_id_user_id", (q) =>
+                q.eq("workspaceId", channel.workspaceId).eq("userId", userId),
+            )
+            .unique();
+
+        if (!member || member.role !== "admin") {
+            throw new Error("No autorizado");
+        }
+
+        // TODO: Remover los mensajes associados
+
+        await ctx.db.delete(args.id);
+
+        return args.id;
+    },
+});
+
+export const update = mutation({
+    args: {
+        id: v.id("channels"),
+        name: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx);
+
+        if (!userId) {
+            throw new Error("No autorizado");
+        }
+
+        const channel = await ctx.db.get(args.id);
+
+        if (!channel) {
+            throw new Error('No se encontro canal');
+        }
+
+        const member = await ctx.db
+            .query("members")
+            .withIndex("by_workespace_id_user_id", (q) =>
+                q.eq("workspaceId", channel.workspaceId).eq("userId", userId),
+            )
+            .unique();
+
+        if (!member || member.role !== "admin") {
+            throw new Error("No autorizado");
+        }
+
+        await ctx.db.patch(args.id, {
+            name: args.name,
+        });
+
+        return args.id;
+    },
+});
+
 export const create = mutation({
     args: {
         name: v.string(),

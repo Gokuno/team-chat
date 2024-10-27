@@ -96,7 +96,7 @@ export const InviteModal = ({
                             <RefreshCcw className="size-4 ml-2" />
                         </Button>
                         <DialogClose asChild>
-                            <Button className="bg-blue-800 text-white">
+                            <Button className="bg-black text-white">
                                 Cerrar
                             </Button>
                         </DialogClose>

@@ -10,7 +10,7 @@ export const Toolbar = () => {
     const { data } = useGetWorkspace({ id: workspaceId });
 
     return (
-        <nav className="bg-slate-800 flex items-center justify-between h-10 p-1.5">
+        <nav className="bg-[#242522] flex items-center justify-between h-10 p-1.5">
             <div className="flex-1" />
             <div className="min-w-[280px] max-[642px] grow-[2] shrink">
                 <Button variant="slack" size="sm" className="bg-slate-400/25 hover:bg-slate-600 w-full justify-start h-7 px-2 mt-1 mb-1">

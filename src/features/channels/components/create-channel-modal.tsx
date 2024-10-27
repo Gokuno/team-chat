@@ -70,7 +70,7 @@ export const CreateChannelModal = () => {
                         placeholder="e.g. planeacion-presupuesto"
                     />
                     <div className="flex justify-end">
-                        <Button disabled={false} className="bg-blue-800 text-white">
+                        <Button disabled={false} className="bg-black text-white">
                             Crear
                         </Button>
                     </div>

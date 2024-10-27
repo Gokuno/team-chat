@@ -132,7 +132,7 @@ export const PreferencesModal = ({
                                                 Cancelar
                                             </Button>
                                         </DialogClose>
-                                        <Button className="bg-blue-800 text-white" disabled={isUpdatingWorkspace}>
+                                        <Button className="bg-black text-white" disabled={isUpdatingWorkspace}>
                                             Guardar
                                         </Button>
                                     </DialogFooter>

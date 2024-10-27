@@ -55,7 +55,7 @@ export const useConfirm = (
                     </Button>
                     <Button
                         onClick={handleConfirm}
-                        className="bg-blue-800 text-white"
+                        className="bg-black text-white"
                     >
                         Confirmar
                     </Button>

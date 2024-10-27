@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import { Hint } from "./hint";
 import { Button } from "./ui/button";
+import { EmojiPopover } from "./emoji-popover";
 
 import "quill/dist/quill.snow.css";
 
@@ -130,6 +131,11 @@ const Editor = ({
         }
     };
 
+    const onEmojiSelect = (emoji: any) => {
+        const quill = quillRef.current;
+
+        quill?.insertText(quill?.getSelection()?.index || 0, emoji.native);
+    }
 
     const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 
@@ -160,16 +166,15 @@ const Editor = ({
                             <PiTextAa className="size-5" />
                         </Button>
                     </Hint>
-                    <Hint label="Emoji">
+                    <EmojiPopover onEmojiSelect={onEmojiSelect}>
                         <Button
                             disabled={disabled}
                             size="sm"
                             variant="ghost"
-                            onClick={() => { }}
                         >
                             <Smile className="size-5" />
                         </Button>
-                    </Hint>
+                    </EmojiPopover>
                     {variant === "create" && (
                         <Hint label="Imagen">
                             <Button
@@ -219,11 +224,16 @@ const Editor = ({
                     )}
                 </div>
             </div>
-            <div className="p-2 text-[12px] text-gray-500 flex justify-end">
-                <p>
-                    <strong>Shift + Enter</strong> para agregar una linea nueva
-                </p>
-            </div>
+            {variant === "create" && (
+                <div className={cn(
+                    "p-2 text-[12px] text-gray-500 flex justify-end opacity-0 transition",
+                    !isEmpty && "opacity-100"
+                )}>
+                    <p>
+                        <strong>Shift + Enter</strong> para agregar una linea nueva
+                    </p>
+                </div>
+            )}
         </div>
     );
 };

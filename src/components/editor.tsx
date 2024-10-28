@@ -79,8 +79,15 @@ const Editor = ({
                         enter: {
                             key: "Enter",
                             handler: () => {
-                                // TODO Submit form
-                                return;
+                                const text = quill.getText();
+                                const addedImage = imageElementRef.current?.files?.[0] || null;
+
+                                const isEmpty = !addedImage && text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
+
+                                if (isEmpty) return;
+
+                                const body = JSON.stringify(quill.getContents());
+                                submitRef.current?.({ body, image: addedImage });
                             }
                         },
                         shift_enter: {
@@ -140,7 +147,7 @@ const Editor = ({
         quill?.insertText(quill?.getSelection()?.index || 0, emoji.native);
     }
 
-    const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
+    const isEmpty = !image && text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 
     // console.log({ isEmpty, text });
 
@@ -225,7 +232,7 @@ const Editor = ({
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => { }}
+                                onClick={onCancel}
                                 disabled={disabled}
                             >
                                 Cancelar
@@ -234,7 +241,12 @@ const Editor = ({
                                 disabled={disabled || isEmpty}
                                 variant="slack"
                                 size="sm"
-                                onClick={() => { }}
+                                onClick={() => {
+                                    onSubmit({
+                                        body: JSON.stringify(quillRef.current?.getContents()),
+                                        image,
+                                    })
+                                }}
                             >
                                 Guardar
                             </Button>
@@ -243,7 +255,12 @@ const Editor = ({
                     {variant === "create" && (
                         <Button
                             disabled={disabled || isEmpty}
-                            onClick={() => { }}
+                            onClick={() => {
+                                onSubmit({
+                                    body: JSON.stringify(quillRef.current?.getContents()),
+                                    image,
+                                })
+                            }}
                             size="iconSm"
                             className={cn(
                                 "ml-auto",

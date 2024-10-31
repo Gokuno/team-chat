@@ -23,8 +23,8 @@ export const create = mutation({
         image: v.optional(v.id("_storage")),
         workspaceId: v.id("workspaces"),
         channelId: v.optional(v.id("channels")),
+        conversationlId: v.optional(v.id("conversations")),
         parentMessageId: v.optional(v.id("messages")),
-        //TODO: add conversationId
     },
     handler: async (ctx, args) => {
         const userId = await getAuthUserId(ctx);
@@ -39,13 +39,24 @@ export const create = mutation({
             throw new Error("No autorizado");
         }
 
-        // TODO: Handle conversationId
+        let _conversationId = args.conversationlId;
+        // Solo posible si estamos contestando un mensaje en una conversacion 1 a 1
+        if (!args.conversationlId && !args.channelId && args.parentMessageId) {
+            const parentMessage = await ctx.db.get(args.parentMessageId);
+
+            if (!parentMessage) {
+                throw new Error("Mensaje principal no se encontro");
+            }
+
+            _conversationId = parentMessage.conversationId;
+        }
 
         const messageId = await ctx.db.insert("messages", {
             memberId: member._id,
             body: args.body,
             image: args.image,
             channelId: args.channelId,
+            conversationId: _conversationId,
             workspaceId: args.workspaceId,
             parentMessageId: args.parentMessageId,
         });
